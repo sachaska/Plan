@@ -4,164 +4,84 @@
 
 // Revision History:
 /*      - 2023, Feb 1 Ai Sun - Initial creation of the class.
+
+ *      - 2024, Feb 2 Ai Sun - Delete inner class Material, change the structure
+ *      of Formula class.
+ *
+ *      -2024, Feb 3 Ai Sun - Change arrays to map
  */
 
-// Process:
-/*      A Formula object is created by the user inputting material names and
- *      quantities (both input and output materials) through the constructor,
- *      which initializes the _inputMaterials and _outputMaterials.
+/*
+ * This is the implementation of formula.h. The Formula class represents a
+ * formula that can be used to convert certain input materials into certain output materials.
+ * Each Formula object contains two maps, one for the input materials and their
+ * quantities, and one for the output materials and their quantities.
+ * The Formula class provides methods to increase the proficiency level of a
+ * formula, get the current proficiency level, apply the formula to produce
+ * output materials, and convert a Formula object to a string.
  *
- *      For each material, the constructor checks if the provided quantity is
- *      greater than zero, and creates a new Material instance.
+ * Implementation Invariant:
+ * The Formula class maintains two maps, one for the input materials and their
+ * quantities, and one for the output materials and their quantities.
+ * The quantities of materials must always be non-negative.
+ * The Formula class ensures that the maps are properly updated when the
+ * proficiency level is increased or the formula is applied.
  *
- *      Upon stored relationship (_inputMaterials and _outputMaterials),
- *      it calculates the conversion probabilities and potential output
- *      materials based on the stored manufacturing probabilities
- *      (_probability array) and efficiencies (_produceRate array).
+ * Error Processing:
+ * The Formula class checks for errors in its methods and throws
+ * exceptions when errors occur. For example, it throws an std::invalid_argument
+ * exception if the number of input or output materials is zero, if a material
+ * name is empty, or if a material quantity is not a positive integer.
  *
- *      The user can interact further with the instance of Formula by calling
- *      the other methods to check or set the current proficiency level,
- *      or retrieve the list of materials for conversion.
- */
-
-// Assumptions:
-/*      1. The input and output material names provided by the user should not
- *      be null or empty.
- *
- *      2. The quantities of input and output materials provided should always
- *      be positive.
- *
- *      3. The _produceRate and _probability arrays are always of length 4.
- *
- *      4. Proficiency should always be integer,
- *      in the range of 0 to 4 (include 4).
- */
-
-// Use and Validity (Error Processing):
-/*      The Formula class validates its input in several ways:
- *          - If input name is empty, an exception is thrown.
- *
- *          - If input quantity is empty, an exception is thrown.
- *
- *          - If the input names' length does not match their respective
- *          quantities, an exception is thrown.
- *
- *          - If the input name does not match as in the format,
- *          an exception is thrown.
- *
- *          - If any input or output quantity is less than zero,
- *          an exception is thrown.
- *
- *          - These checks ensure the validity of the Formula object
- *          throughout its lifecycle.
+ * Assumptions:
+ * The Formula class assumes that all material names passed to its constructor
+ * are non-empty strings, and that all material quantities passed to its
+ * constructor are positive integers. It does not check the validity of
+ * material names or quantities.
  */
 
 #include "formula.h"
 #include <stdexcept>
+#include <map>
 #include <string>
+#include <iostream>
 #include <sstream>
 
-const std::string Formula::EMPTY_STR;
-
-Formula::Material::Material(std::string inName, int quantity)
+Formula::Formula(const std::string inNames[], const int inQuantities[], int inNum,
+                 const std::string outNames[], const int outQuantities[], int outNum)
 {
-    if (inName.empty())
-        throw std::invalid_argument
-                ("Name should not be empty.");
-    if (quantity <= 0)
-        throw std::invalid_argument
-                ("Name should not be empty.");
-    name = inName;
-    this->quantity = quantity;
-}
-
-Formula::Material::Material():name(EMPTY_STR), quantity(DEFAULT) {}
-
-Formula::Material::Material(const Material& other)
-{
-    name = other.name;
-    quantity = other.quantity;
-}
-
-std::string Formula::Material::getName()
-{
-    return name;
-}
-
-int Formula::Material::getQuantity() const
-{
-    return quantity;
-}
-
-std::string Formula::Material::toString()
-{
-    std::ostringstream os;
-    os << quantity << " " << name;
-    return os.str();
-}
-
-Formula::Formula(const std::string inNames[], int inQuantities[],
-                 int inCount,
-                 const std::string outNames[], int outQuantities[],
-                 int outCount)
-{
-    if (outCount == 0 || inCount == 0)
+    // Error handle
+    if (outNum == DEFAULT || inNum == DEFAULT)
         throw std::invalid_argument
                 ("At least one resource should provide.");
 
-    // If size of inNames and inQuantities not match, throw exception
-    inSize = inCount;
-    outSize = outCount;
+    for (int i = DEFAULT; i < inNum; ++i) {
+        if (inNames[i].empty())
+            throw std::invalid_argument
+                    ("resource name shouldn't be empty.");
 
-    // Initialize inputMaterials and outputMaterials
-    inputMaterials = new Material[inSize];
-    outputMaterials = new Material[outSize];
+        if (inQuantities[i] <= DEFAULT)
+            throw std::invalid_argument
+                    ("resource quantity should be positive integer.");
 
-    try {
-        for (int i = 0; i < inSize; i++) {
-            inputMaterials[i] = Material(inNames[i],
-                                         inQuantities[i]);
-        }
+        condition[inNames[i]] = inQuantities[i];
+    }
 
-        for (int i = 0; i < outSize; i++) {
-            outputMaterials[i] = Material(outNames[i],
-                                          outQuantities[i]);
-        }
+    for (int i = DEFAULT; i < outNum; ++i) {
+        if (outNames[i].empty())
+            throw std::invalid_argument
+                    ("resource name shouldn't be empty.");
 
-    } catch (std::exception &e) {
-        throw std::invalid_argument
-        ("Numbers of names and quantity not match");
+        if (outQuantities[i] <= DEFAULT)
+            throw std::invalid_argument
+                    ("resource quantity should be positive integer.");
+
+        result[outNames[i]] = outQuantities[i];
     }
 
     // initialize proficiency level
-    proficiency = 0;
+    proficiency = DEFAULT;
 
-    // initialize current probability
-    for (int i = 0; i < 4; i++) {
-        currentProbability[i] = probability[i];
-    }
-}
-
-
-void Formula::updateProbability(int val)
-{
-    int change = 5 * val;
-    currentProbability[0] -= change;
-    currentProbability[1] -= change;
-    currentProbability[2] += change;
-    currentProbability[3] += change;
-}
-
-double Formula::produce()
-{
-    int randomNumber = rand() % 100;
-    for (int i = 3; i >= 0; --i) {
-        if (randomNumber >= currentProbability[i]) {
-            return produceRate[i];
-        }
-    }
-
-    return 0;
 }
 
 int Formula::getProficiency() const
@@ -169,58 +89,94 @@ int Formula::getProficiency() const
     return proficiency;
 }
 
-void Formula::setProficiency(int level)
-{
-    if (level < 0 || level > 4) {
-        throw std::invalid_argument("Invalid proficiency level.");
+void Formula::increase() {
+    const int BUFF[] = {0, 5, 6, 3};
+    proficiency++;
+    
+    // change produce rate
+    for (int i = DEFAULT; i < TYPE; ++i) {
+        probability[(i)] -= BUFF[i];
     }
 
-    updateProbability(level - proficiency);
-    proficiency = level;
 }
 
 std::string Formula::toString()
 {
-    std::ostringstream os;
-    for (int i = 0; i < (int)inSize; i++) {
-        if (i != 0)
+    std::ostringstream os;              // holds string
+
+    // condition to string
+    for (auto it = condition.begin(); it != condition.end(); ++it) {
+        os << it->second << " " << it->first;
+        if (std::next(it) != condition.end())
             os << ", ";
-        os << inputMaterials[i].toString();
     }
+
     os << "-> ";
-    for (int i = 0; i < (int)outSize; i++) {
-        if (i != 0)
+
+    // result to string
+    for (auto it = result.begin(); it != result.end(); ++it) {
+        os << it->second << " " << it->first;
+        if (std::next(it) != result.end())
             os << ", ";
-        os << outputMaterials[i].toString();
     }
+
     return os.str();
 }
 
 std::string Formula::apply()
 {
     std::ostringstream os;
-    double rate = produce();
+
+    const int INDEX = 1, MAX = 100;
+
+    double rate;
+
+    int randomNumber = rand() % MAX;
+
+    for (int i = DEFAULT; i < TYPE; i++) {
+        // if is the last one
+        if (i == TYPE - INDEX) {
+
+            if (randomNumber >= probability[(i)])
+                rate =  produceRate[(i)];
+
+        }
+        else if (randomNumber >= probability[(i)] &&
+        randomNumber < probability[(i + INDEX)]) {
+
+            rate =  produceRate[(i)];
+
+        }
+
+    }
+
+    std::cout << randomNumber << std::endl;
+
+
     os << "PRODUCE RATE: " << rate << std::endl;
     os << "SIMULATION RESULT: ";
+
     if (rate != 0) {
-        for (int i = 0; i < (int)outSize; i++) {
-            os << outputMaterials[i].getQuantity() * rate
-            << " " << outputMaterials[i].getName() << ", ";
+
+        // result to string
+        for (auto it = result.begin(); it != result.end(); ++it) {
+
+            int temp = it->second;
+
+            os << temp * rate << " " << it->first;
+
+            if (std::next(it) != result.end())
+                os << ", ";
+
         }
+
     }
+
     else {
         os << "N/A";
     }
+
     return os.str();
 }
 
-Formula::~Formula() {
-    if (inputMaterials != nullptr) {
-        delete[] inputMaterials;
-        inputMaterials = nullptr;
-    }
-    if (outputMaterials != nullptr) {
-        delete[] outputMaterials;
-        outputMaterials = nullptr;
-    }
-}
+Formula::~Formula() = default;
