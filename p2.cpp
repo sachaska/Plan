@@ -254,10 +254,10 @@ void testPlanException() {
      * Modify: Attempts to create a Plan object with invalid parameters.
      * Output: Prints a message indicating whether the correct exception was thrown.
      */
-    std::cout << "----------Test Plan constructor exception----------" << std::endl;
+    std::cout << "----------Test Plan exception----------" << std::endl;
     // Test Plan constructor exception
     try {
-        int size = 0;
+        int size = -1;
         Formula* initialSequences[] = {&ironBar, &steelBar};
         Plan plan(initialSequences, size);
     } catch (std::exception& e) {
@@ -265,11 +265,45 @@ void testPlanException() {
     }
 }
 
+void testCopyByValue(Plan plan) {
+    /*
+     * Description: Tests the copying of a Plan object by value.
+     * Input: A Plan object.
+     * Modify: Creates a copy of the input Plan object by passing it by value to a function.
+     * Output: Prints the state of the copied Plan object.
+     */
+    std::cout << "----------Test Copy by value----------" << std::endl;
+    std::cout << "Copy by value: \n" << plan.toString() << std::endl;
+}
+
+void testCopyByAssignment() {
+    /*
+     * Description: Tests the copying of a Plan object by assignment.
+     * Input: A Plan object.
+     * Modify: Creates a copy of the input Plan object by assigning it to a new Plan object.
+     * Output: Prints the state of the copied Plan object.
+     */
+    int size = 2;
+    Formula* initialSequences[] = {&ironBar, &steelBar};
+    Plan plan(initialSequences, size);
+    Plan planCopy;
+    planCopy = plan;
+    std::cout << "----------Test Copy by assignment----------" << std::endl;
+    std::cout << "Copy by assignment: \n" << planCopy.toString() << std::endl;
+}
+
 int main() {
     testPlanConstructor();
     testPlanAdd();
     testPlanRemove();
     testPlanReplace();
+
+    int size = 2;       // size for test copy
+    Formula* initialSequences[] = {&ironBar, &steelBar};
+    Plan plan(initialSequences, size);
+
+    testCopyByValue(plan);
+    testCopyByAssignment();
     testPlanCopyConstructor();
     testPlanMoveConstructor();
     testPlanCopyOperator();
