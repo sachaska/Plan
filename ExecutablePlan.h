@@ -10,7 +10,7 @@
  */
 
 #include "plan.h"
-#include "Stockpile.h"
+#include "stockpile.h"
 
 /// <summary>
 /// Class representing an executable plan.
