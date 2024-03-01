@@ -75,6 +75,7 @@ public:
 
     /// <summary>
     /// Less than operator
+    /// Usage: used to compare the priority or execution time of two plans.
     /// Precondition: None.
     /// Postcondition: Boolean value is returned.
     /// </summary>
@@ -82,6 +83,7 @@ public:
 
     /// <summary>
     /// Greater than operator
+    /// Usage: used to compare the priority or execution time of two plans.
     /// Precondition: None.
     /// Postcondition: Boolean value is returned.
     /// </summary>
@@ -89,6 +91,7 @@ public:
 
     /// <summary>
     /// Stream insertion operator
+    /// Usage: used to print the contents of a plan.
     /// Precondition: None.
     /// Postcondition: The string representation of the Plan object is inserted
     /// into the output stream.
