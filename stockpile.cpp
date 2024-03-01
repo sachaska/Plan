@@ -46,7 +46,7 @@ Stockpile::Stockpile() = default;
 Stockpile::~Stockpile() = default;
 
 bool Stockpile::isEmpty() {
-    return supplies.size() == DEFAULT;
+    return static_cast<int>(supplies.size()) == DEFAULT;
 }
 
 std::map<std::string, int> Stockpile::getSupplies() {
