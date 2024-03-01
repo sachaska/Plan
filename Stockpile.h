@@ -10,7 +10,8 @@
  */
 
 
-#include<map>
+#include <map>
+#include <string>
 
 /// <summary>
 /// Class representing a Stockpile of resources.
