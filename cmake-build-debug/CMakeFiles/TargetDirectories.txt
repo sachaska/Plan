@@ -1,0 +1,3 @@
+/Users/sunai/CLionProjects/pa2/cmake-build-debug/CMakeFiles/pa2.dir
+/Users/sunai/CLionProjects/pa2/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/sunai/CLionProjects/pa2/cmake-build-debug/CMakeFiles/rebuild_cache.dir

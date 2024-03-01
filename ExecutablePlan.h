@@ -11,6 +11,7 @@
 
 #include "plan.h"
 #include "stockpile.h"
+#include <memory>
 
 /// <summary>
 /// Class representing an executable plan.
