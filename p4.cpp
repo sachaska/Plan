@@ -6,7 +6,8 @@
 #include <memory>
 
 std::map<std::string, int> firSupplies = {{"Wood", 100}, {"Iron", 50}};
-std::map<std::string, int> secSupplies = {{"Egg", 22}, {"Flour", 1}, {"Sugar", 88}};
+std::map<std::string, int> secSupplies = {{"Egg", 22}, {"Flour", 1},
+                                          {"Sugar", 88}};
 
 const std::string inFirNames[] = {"Wood", "Iron"};
 const int inFirQuantities[] = {10, 5};
@@ -17,6 +18,106 @@ const std::string inSecNames[] = {"Egg", "Flour", "Sugar"};
 const int inSecQuantities[] = {3, 10, 8};
 const std::string outSecNames[] = {"Cake"};
 const int outSecQuantities[] = {1};
+
+void testFormulaMethods() {
+    std::cout << "----------Testing Formula Methods----------" << std::endl;
+    const std::string inNames[] = {"Iron", "Gold"};
+    const int inQuantities[] = {10, 20};
+    const std::string outNames[] = {"Silver", "Copper"};
+    const int outQuantities[] = {30, 40};
+
+    Formula* firFormula = new Formula(inNames, inQuantities,
+                                      2, outNames, outQuantities, 2);
+    Formula* secFormula = new Formula(inNames, inQuantities,
+                                      2, outNames, outQuantities, 2);
+
+    // Test == and != operators
+    std::cout << "Are the two formulas equal? " <<
+              (*firFormula == *secFormula ? "Yes" : "No") << std::endl;
+
+    std::cout << "Are the two formulas not equal? " <<
+              (*firFormula != *secFormula ? "Yes" : "No") << std::endl;
+
+    // Test getInput function
+    std::map<std::string, int> inputs = firFormula->getInput();
+    std::cout << "Inputs of the first formula: " << std::endl;
+    for (const auto& pair : inputs) {
+        std::cout << pair.first << ": " << pair.second << std::endl;
+    }
+
+    // Test ApplyToStockpile function
+    std::cout << "ApplyToStockpile function will be test "
+                 "indirect in executablePlan class." << std::endl;
+
+    delete firFormula;
+    delete secFormula;
+}
+
+void testPlanConstructors() {
+    std::cout << "----------Testing Plan Constructors----------" << std::endl;
+    Formula* firFormula = new Formula(inFirNames, inFirQuantities,
+                                      2, outFirNames, outFirQuantities, 2);
+    Formula* secFormula = new Formula(inSecNames, inSecQuantities,
+                                      3, outSecNames, outSecQuantities, 1);
+
+    Plan plan;
+    plan.Add(firFormula);
+    plan.Add(secFormula);
+
+    // Test Copy constructor
+    Plan copiedPlan = plan;
+    std::cout << "Copied plan: " << copiedPlan << std::endl;
+    std::cout << "Does copied plan as same as original plan?"
+    << (plan < copiedPlan ? "Yes" : "No") << std::endl;
+
+    // Test Move constructor
+    Plan movedPlan = std::move(copiedPlan);
+    std::cout << "Moved plan: " << movedPlan << std::endl;
+
+    std::cout << "Does original plan still exist?"
+              << (copiedPlan == nullptr ? "No" : "Yes") << std::endl;
+
+    delete firFormula;
+    delete secFormula;
+}
+
+void testPlanOperators() {
+    std::cout << "----------Testing Plan Operators----------" << std::endl;
+    Formula* firFormula = new Formula(inFirNames, inFirQuantities,
+                                      2, outFirNames, outFirQuantities, 2);
+    Formula* secFormula = new Formula(inSecNames, inSecQuantities,
+                                      3, outSecNames, outSecQuantities, 1);
+
+    Plan plan;
+    plan.Add(firFormula);
+    plan.Add(secFormula);
+
+    // Test == and != operators
+    Plan anotherPlan;
+    anotherPlan.Add(firFormula);
+    anotherPlan.Add(secFormula);
+
+    std::cout << "Are the two plans equal? " <<
+              (plan == anotherPlan ? "Yes" : "No") << std::endl;
+
+    std::cout << "Are the two plans not equal? " <<
+              (plan != anotherPlan ? "Yes" : "No") << std::endl;
+
+    // Test < and > operators
+    std::cout << "Is the first plan's size smaller than the second plan? " <<
+              (plan < anotherPlan ? "Yes" : "No") << std::endl;
+
+    std::cout << "Is the first plan's size bigger than the second plan? " <<
+              (plan > anotherPlan ? "Yes" : "No") << std::endl;
+
+    // Test << operator
+    std::cout << "First plan: " << plan << std::endl;
+    std::cout << "Second plan: " << anotherPlan << std::endl;
+
+    delete firFormula;
+    delete secFormula;
+}
+
 
 void testApply(ExecutablePlan& plan, std::shared_ptr<Stockpile>& stockpile) {
     for (int i = 0; i < 2; ++i) {
@@ -83,6 +184,48 @@ void testStockpileMethods() {
         std::cout << "Exception captured: " << e.what() << std::endl;
     }
 
+    // Test Decrease method
+    stockpile->decrease("Iron", 10);
+    std::cout << "After decreasing Iron: " << stockpile->query() << std::endl;
+
+    int invalid_value = 100;
+    std::string invalid_name = "SJ";
+    int zero = 0;
+
+    try{
+        stockpile->decrease("Iron", invalid_value);
+    } catch (const std::exception& e) {
+        std::cout << "Exception captured: " << e.what() << std::endl;
+    }
+
+    try{
+        stockpile->decrease("Iron", zero);
+    } catch (const std::exception& e) {
+        std::cout << "Exception captured: " << e.what() << std::endl;
+    }
+
+    try{
+        stockpile->decrease(invalid_name, 10);
+    } catch (const std::exception& e) {
+        std::cout << "Exception captured: " << e.what() << std::endl;
+    }
+
+    // Test Increase method
+    stockpile->increase("Iron", 20);
+    std::cout << "After increasing Iron: " << stockpile->query() << std::endl;
+
+    try{
+        stockpile->increase(invalid_name, 10);
+    } catch (const std::exception& e) {
+        std::cout << "Exception captured: " << e.what() << std::endl;
+    }
+
+    try{
+        stockpile->increase("Iron", zero);
+    } catch (const std::exception& e) {
+        std::cout << "Exception captured: " << e.what() << std::endl;
+    }
+
     // Test Query method
     std::cout << "Current stockpile: " << stockpile->query() << std::endl;
 
@@ -116,18 +259,43 @@ void testExecutablePlanMethods() {
 
     // Test == and != operators
     ExecutablePlan anotherPlan;
+
+    // Copy constructor
+    ExecutablePlan samePlan = plan;
+
     anotherPlan.Add(firFormula);
+    anotherPlan.Add(secFormula);
+
+    std::cout << "Are deepcopy same plan equal to original? " <<
+              (plan == samePlan ? "Yes" : "No") << std::endl;
+
     std::cout << "Are the two plans equal? " <<
     (plan == anotherPlan ? "Yes" : "No") << std::endl;
 
-    std::cout << "Are the two plans equal? " <<
-              (plan != anotherPlan ? "No" : "Yes") << std::endl;
+    std::cout << "Are the two plans not equal? " <<
+              (plan != anotherPlan ? "Yes" : "No") << std::endl;
+
+    // Test < and > operators
+    std::cout << "Is the first plan's size smaller than the second plan? " <<
+              (plan < anotherPlan ? "Yes" : "No") << std::endl;
+
+    std::cout << "Is the first plan's size bigger than the second plan? " <<
+              (plan > anotherPlan ? "Yes" : "No") << std::endl;
+
+    // Test << operator
+    std::cout << "First plan: " << plan << std::endl;
+    std::cout << "Second plan: " << anotherPlan << std::endl;
 
     delete firFormula;
     delete secFormula;
 }
 
 int main() {
+    testFormulaMethods();
+    testPlanConstructors();
+    testPlanOperators();
     mainTestApply();
+    testStockpileMethods();
+    testExecutablePlanMethods();
     return 0;
 }

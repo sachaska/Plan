@@ -81,22 +81,36 @@ std::string Stockpile::query() {
 
 // Method to increase a resource quantity
 void Stockpile::increase(const std::string& name, int quantity) {
+
+    if (quantity <= DEFAULT) {
+        throw std::invalid_argument("Not valid quantity.");
+    }
+
     if (supplies.find(name) != supplies.end()) {
         supplies[name] += quantity;
     } else {
         throw std::invalid_argument("Resource not found.");
     }
+
 }
 
 // Method to decrease a resource quantity
 void Stockpile::decrease(const std::string& name, int quantity) {
+
+    if (quantity <= DEFAULT) {
+        throw std::invalid_argument("Not valid quantity.");
+    }
+
     if (supplies.find(name) != supplies.end()) {
+
         if (supplies[name] - quantity >= DEFAULT) {
             supplies[name] -= quantity;
         } else {
             throw std::invalid_argument("Not enough quantity to decrease.");
         }
+
     } else {
         throw std::invalid_argument("Resource not found.");
     }
+
 }
