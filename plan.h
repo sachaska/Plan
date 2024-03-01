@@ -108,7 +108,7 @@ public:
     /// Precondition: None.
     /// Postcondition: The Plan object is destroyed and its memory is freed.
     /// </summary>
-    ~Plan();
+    virtual ~Plan();
 
     /// <summary>
     /// Add function
