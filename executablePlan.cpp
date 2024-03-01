@@ -65,25 +65,30 @@ std::string ExecutablePlan::Apply() {
     return sequences[current - INDEX]->apply();
 }
 
-std::shared_ptr<Stockpile> ExecutablePlan::Apply
-(const std::shared_ptr<Stockpile>& stock) {
+std::shared_ptr<Stockpile> ExecutablePlan::Apply(const std::shared_ptr<Stockpile>& stock) {
 
     if (current >= size) {
-        throw std::out_of_range
-                ("Cannot advance beyond the end of the sequence.");
+        throw std::out_of_range("Cannot advance beyond the end of the sequence.");
     }
 
     std::map<std::string, int> supplies = stock->getSupplies();
-
     std::map<std::string, int> inputs = sequences[current]->getInput();
 
-    for (const auto& input : inputs) {
+    // If the sizes of the inputs and supplies maps are not equal, throw an exception
+    if (inputs.size() != supplies.size()) {
+        throw std::invalid_argument("The sizes are not equal.");
+    }
 
-        if (supplies[input.first] < input.second) {
-            throw std::invalid_argument("Not enough supplies in "
-                                        "the current Stockpile.");
+    for (const auto& input : inputs) {
+        // If the key in the inputs map does not exist in the supplies map, throw an exception
+        if (supplies.find(input.first) == supplies.end()) {
+            throw std::invalid_argument("The names are not equal.");
         }
 
+        // If quantity in stockpile is not enough, throw an exception
+        if (supplies[input.first] < input.second) {
+            throw std::invalid_argument("Not enough supplies in the current Stockpile.");
+        }
     }
 
     // If not, remove the associated quantities from Stockpile.
