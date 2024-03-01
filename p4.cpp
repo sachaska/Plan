@@ -5,6 +5,30 @@
 #include <iostream>
 #include <memory>
 
+/// Author: Ai Sun
+///   Date: 2023, Feb 2
+///   Platform: CLion (Mac)
+
+/// Revision History:
+/*      - 2024, Feb 1 Ai Sun - Initial creation of the driver.
+ */
+
+/*
+ * Purpose: This file is used to test the functionality of new methods in Plan
+ * and Formula, complete functions of Stockpile, and ExecutablePlan classes.
+ *
+ * Input: The input to this program is a set of Formula objects that are used
+ * to create and manipulate a Plan object.
+ *
+ * Process: The program tests each function of the Plan, Formula, Stockpile,
+ * and ExecutablePlan classes by creating objects, calling the function, and
+ * checking the result.
+ *
+ * Output: The output of this program is a series of messages that indicate
+ * the result of each test.
+ */
+
+// Global variables for testing
 std::map<std::string, int> firSupplies = {{"Wood", 100}, {"Iron", 50}};
 std::map<std::string, int> secSupplies = {{"Egg", 22}, {"Flour", 1},
                                           {"Sugar", 88}};
@@ -18,6 +42,54 @@ const std::string inSecNames[] = {"Egg", "Flour", "Sugar"};
 const int inSecQuantities[] = {3, 10, 8};
 const std::string outSecNames[] = {"Cake"};
 const int outSecQuantities[] = {1};
+
+/*
+ * Description: Tests the methods of the Formula class.
+ * Input: None.
+ * Modify: Creates Formula objects and performs operations on them.
+ * Output: Prints a message indicating the result of each test.
+ */
+void testFormulaMethods();
+
+/*
+ * Description: Tests the constructors of the Plan class.
+ * Input: None.
+ * Modify: Creates Plan objects.
+ * Output: Prints a message indicating the result of the test.
+ */
+void testPlanConstructors();
+
+/*
+ * Description: Tests the operators of the Plan class.
+ * Input: None.
+ * Modify: Creates Plan objects and performs operations on them.
+ * Output: Prints a message indicating the result of the test.
+ */
+void testPlanOperators();
+
+/*
+ * Description: Tests the Apply function of the ExecutablePlan class.
+ * Input: An ExecutablePlan object and a shared pointer to a Stockpile object.
+ * Modify: Applies the plan to the stockpile.
+ * Output: Prints a message indicating the result of the test.
+ */
+void mainTestApply();
+
+/*
+ * Description: Tests the methods of the Stockpile class.
+ * Input: None.
+ * Modify: Creates a Stockpile object and performs operations on it.
+ * Output: Prints a message indicating the result of the test.
+ */
+void testStockpileMethods();
+
+/*
+ * Description: Tests the methods of the ExecutablePlan class.
+ * Input: None.
+ * Modify: Creates an ExecutablePlan object and performs operations on it.
+ * Output: Prints a message indicating the result of the test.
+ */
+void testExecutablePlanMethods();
 
 void testFormulaMethods() {
     std::cout << "----------Testing Formula Methods----------" << std::endl;
