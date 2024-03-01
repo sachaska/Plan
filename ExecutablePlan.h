@@ -10,14 +10,14 @@
  */
 
 #include "plan.h"
-#include "stockpile.h"
+#include "Stockpile.h"
 
 /// <summary>
 /// Class representing an executable plan.
 /// Class Invariant: Inherits from Plan class, maintains a current index to
 /// track progress of the plan.
 /// </summary>
-class executablePlan : public Plan {
+class ExecutablePlan : public Plan {
 private:
     int current; // Current index to track progress
 
@@ -26,10 +26,10 @@ public:
     /// Constructor
     /// Precondition: initialSequences must be a valid array of Formula pointers,
     /// initialSize must be non-negative.
-    /// Postcondition: An executablePlan object is created with given initial
+    /// Postcondition: An ExecutablePlan object is created with given initial
     /// sequences and size.
     /// </summary>
-    executablePlan(Formula* initialSequences[] = nullptr, int initialSize = DEFAULT);
+    ExecutablePlan(Formula* initialSequences[] = nullptr, int initialSize = DEFAULT);
 
     /// <summary>
     /// Apply function
@@ -39,7 +39,7 @@ public:
     /// </summary>
     std::string Apply() override;
 
-    std::shared_ptr<stockpile> Apply(const std::shared_ptr<stockpile>&);
+    std::shared_ptr<Stockpile> Apply(const std::shared_ptr<Stockpile>&);
 
     /// <summary>
     /// Query function
@@ -68,26 +68,26 @@ public:
     /// <summary>
     /// Clone function
     /// Precondition: None.
-    /// Postcondition: A pointer to a new executablePlan object, which is a
-    /// deep copy of the current executablePlan object, is returned.
+    /// Postcondition: A pointer to a new ExecutablePlan object, which is a
+    /// deep copy of the current ExecutablePlan object, is returned.
     /// </summary>
     Plan* Clone() override;
 
     /// <summary>
     /// Equality operator
     /// Precondition: None.
-    /// Postcondition: Returns true if the two executablePlan objects are equal,
+    /// Postcondition: Returns true if the two ExecutablePlan objects are equal,
     /// false otherwise.
     /// </summary>
-    bool operator==(const executablePlan& other) const;
+    bool operator==(const ExecutablePlan& other) const;
 
     /// <summary>
     /// Inequality operator
     /// Precondition: None.
-    /// Postcondition: Returns true if the two executablePlan objects are not
+    /// Postcondition: Returns true if the two ExecutablePlan objects are not
     /// equal, false otherwise.
     /// </summary>
-    bool operator!=(const executablePlan& other) const;
+    bool operator!=(const ExecutablePlan& other) const;
 };
 
 #endif // EXECUTABLEPLAN_H

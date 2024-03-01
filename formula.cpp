@@ -43,7 +43,7 @@
  */
 
 #include "formula.h"
-#include "stockpile.h"
+#include "Stockpile.h"
 #include <stdexcept>
 #include <map>
 #include <string>
@@ -137,13 +137,13 @@ std::string Formula::toString()
     return os.str();
 }
 
-stockpile* Formula::applyToStockpile() {
+Stockpile* Formula::applyToStockpile() {
 
     const int INDEX = 1, MAX = 100;
 
     double rate;
 
-    stockpile* stock;
+    Stockpile* stock;
 
     int randomNumber = rand() % MAX;
 
@@ -176,11 +176,11 @@ stockpile* Formula::applyToStockpile() {
 
         }
 
-        stock = new stockpile(results);
+        stock = new Stockpile(results);
 
     }
 
-    else stock = new stockpile();
+    else stock = new Stockpile();
 
     return stock;
 }

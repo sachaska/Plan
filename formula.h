@@ -99,7 +99,7 @@ public:
     /// Precondition: None.
     /// Postcondition: Returns a pointer to a Stockpile object after apply.
     /// </summary>
-    stockpile* applyToStockpile();
+    Stockpile* applyToStockpile();
 
     /// <summary>
     /// To String function

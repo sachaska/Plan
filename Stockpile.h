@@ -13,10 +13,10 @@
 #include<map>
 
 /// <summary>
-/// Class representing a stockpile of resources.
+/// Class representing a Stockpile of resources.
 /// Class Invariant: The quantities of resources must always be non-negative.
 /// </summary>
-class stockpile {
+class Stockpile {
     std::map<std::string, int> supplies;
                                 // Holds set of resources with their quantities.
 
@@ -26,42 +26,42 @@ public:
     /// <summary>
     /// Default Constructor
     /// Precondition: None.
-    /// Postcondition: A stockpile object is created with no resources.
+    /// Postcondition: A Stockpile object is created with no resources.
     /// </summary>
-    stockpile();
+    Stockpile();
 
     /// <summary>
     /// Constructor
     /// Precondition: input must not be empty, quantities must be non-negative.
-    /// Postcondition: A stockpile object is created with given resources.
+    /// Postcondition: A Stockpile object is created with given resources.
     /// </summary>
-    stockpile(std::map<std::string, int> input);
+    Stockpile(std::map<std::string, int> input);
 
     /// <summary>
     /// Query function
     /// Precondition: None.
-    /// Postcondition: A string representation of the stockpile object is returned.
+    /// Postcondition: A string representation of the Stockpile object is returned.
     /// </summary>
     std::string query();
 
     /// <summary>
     /// Get Supplies function
     /// Precondition: None.
-    /// Postcondition: A map of the stockpile's resources is returned.
+    /// Postcondition: A map of the Stockpile's resources is returned.
     /// </summary>
     std::map<std::string, int> getSupplies();
 
     /// <summary>
     /// Is Empty function
     /// Precondition: None.
-    /// Postcondition: Returns true if the stockpile is empty, false otherwise.
+    /// Postcondition: Returns true if the Stockpile is empty, false otherwise.
     /// </summary>
     bool isEmpty();
 
     /// <summary>
     /// Add function
     /// Precondition: name must not be empty, quantity must be non-negative.
-    /// Postcondition: The specified resource is added to the stockpile
+    /// Postcondition: The specified resource is added to the Stockpile
     /// with the given quantity.
     /// </summary>
     void add(const std::string& name, int quantity);
@@ -69,7 +69,7 @@ public:
     /// <summary>
     /// Remove function
     /// Precondition: name must not be empty.
-    /// Postcondition: The specified resource is removed from the stockpile.
+    /// Postcondition: The specified resource is removed from the Stockpile.
     /// </summary>
     void remove(const std::string& name);
 
@@ -77,14 +77,14 @@ public:
     /// Increase function
     /// Precondition: name must not be empty, quantity must be non-negative.
     /// Postcondition: The quantity of the specified resource in the
-    /// stockpile is increased by the given quantity.
+    /// Stockpile is increased by the given quantity.
     /// </summary>
     void increase(const std::string& name, int quantity);
 
     /// <summary>
     /// Decrease function
     /// Precondition: name must not be empty, quantity must be non-negative.
-    /// Postcondition: The quantity of the specified resource in the stockpile
+    /// Postcondition: The quantity of the specified resource in the Stockpile
     /// is decreased by the given quantity.
     /// </summary>
     void decrease(const std::string& name, int quantity);
@@ -92,9 +92,9 @@ public:
     /// <summary>
     /// Destructor
     /// Precondition: None.
-    /// Postcondition: The stockpile object is destroyed and its memory is freed.
+    /// Postcondition: The Stockpile object is destroyed and its memory is freed.
     /// </summary>
-    ~stockpile();
+    ~Stockpile();
 };
 
 #endif //PA2_STOCKPILE_H

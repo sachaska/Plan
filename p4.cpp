@@ -1,6 +1,5 @@
-//
-// Created by Sun Ai on 2024/2/28.
-//
+#include "plan.h"
+#include "formula.h"
 #include "executablePlan.h"
 #include "stockpile.h"
 #include <iostream>
@@ -8,7 +7,7 @@
 
 int main() {
     std::map<std::string, int> inputSupplies = {{"Wood", 100}, {"Iron", 50}};
-    std::shared_ptr<stockpile> inputStockpile = std::make_shared<stockpile>(inputSupplies);
+    std::shared_ptr<Stockpile> inputStockpile = std::make_shared<Stockpile>(inputSupplies);
 
     const std::string inNames[] = {"Wood", "Iron"};
     const int inQuantities[] = {10, 5};
@@ -16,13 +15,13 @@ int main() {
     const int outQuantities[] = {1};
     Formula* formula = new Formula(inNames, inQuantities, 2, outNames, outQuantities, 1);
 
-    executablePlan plan;
+    ExecutablePlan plan;
     plan.Add(formula);
 
     try {
-        std::shared_ptr<stockpile> outputStockpile = plan.Apply(inputStockpile);
+        std::shared_ptr<Stockpile> outputStockpile = plan.Apply(inputStockpile);
         std::cout << "Applied formula successfully!" << std::endl;
-        std::cout << "Resulting stockpile: ";
+        std::cout << "Resulting Stockpile: ";
 
         if (outputStockpile->isEmpty()) {
             std::cout << "N?A" << std::endl;
@@ -34,7 +33,6 @@ int main() {
         std::cerr << "Error: " << e.what() << std::endl;
     }
 
-    // 释放 Formula 对象的内存
     delete formula;
 
     return 0;
