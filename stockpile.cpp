@@ -31,7 +31,7 @@
  * It does not check the validity of resource names or quantities.
  */
 
-#include "Stockpile.h"
+#include "stockpile.h"
 #include <string>
 #include <sstream>
 #include <map>

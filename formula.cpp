@@ -43,7 +43,7 @@
  */
 
 #include "formula.h"
-#include "Stockpile.h"
+#include "stockpile.h"
 #include <stdexcept>
 #include <map>
 #include <string>
