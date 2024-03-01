@@ -8,6 +8,8 @@
 
 /// Revision History:
 /*      - 2024, Feb 1 Ai Sun - Initial creation of the class.
+ *      - 2024, Feb 29 Ai Sun - Add more functions translated from C#.
+ *                            - Add more overloaded operators.
  */
 
 /*
@@ -90,7 +92,6 @@ Plan::Plan(Plan&& source)
         : sequences(source.sequences), size(source.size),
         capacity(source.capacity)
 {
-    // Nullify the source object to prevent double deletion
     source.sequences = nullptr;
     source.size = source.capacity = DEFAULT;
 }
@@ -121,6 +122,31 @@ Plan& Plan::operator=(const Plan& source)
     return *this;
 }
 
+bool Plan::operator==(const Plan& other) const {
+    if (size != other.size) return false;
+    for (int i = 0; i < size; ++i) {
+        if (*sequences[i] != *other.sequences[i]) return false;
+    }
+    return true;
+}
+
+bool Plan::operator!=(const Plan& other) const {
+    return !(*this == other);
+}
+
+bool Plan::operator<(const Plan& other) const {
+    return size < other.size;
+}
+
+bool Plan::operator>(const Plan& other) const {
+    return size > other.size;
+}
+
+std::ostream& operator<<(std::ostream& os, const Plan& plan) {
+    os << plan.toString();
+    return os;
+}
+
 // Move operator
 Plan& Plan::operator=(Plan&& source)
 {
@@ -139,7 +165,6 @@ Plan& Plan::operator=(Plan&& source)
         size = source.size;
         capacity = source.capacity;
 
-        // Nullify the source object to prevent double deletion
         source.sequences = nullptr;
         source.size = source.capacity = DEFAULT;
     }
@@ -193,7 +218,6 @@ void Plan::Add(Formula* newFormula)
     ++size;
 }
 
-
 // Remove function
 void Plan::Remove()
 {
@@ -226,8 +250,20 @@ void Plan::Replace(int index, Formula* newFormula)
     sequences[index] = new Formula(*newFormula);
 }
 
+std::string Plan::Apply() {
+    return "";
+}
+
+std::string Plan::Query() {
+    return "";
+}
+
+Plan* Plan::Clone() {
+    return nullptr;
+}
+
 // To string function
-std::string Plan::toString() {
+std::string Plan::toString() const {
     // each formula to string
     std::ostringstream os;
 

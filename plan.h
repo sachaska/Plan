@@ -9,6 +9,8 @@
 
 /// Revision History:
 /*      - 2024, Feb 1 Ai Sun - Initial creation of the class.
+ *      - 2024, Feb 29 Ai Sun - Add more functions translated from C#.
+ *                            - Add more overloaded operators.
  */
 
 /// <summary>
@@ -19,7 +21,7 @@
 /// </summary>
 class Plan
 {
-private:
+protected:
     Formula** sequences; // Dynamic array to hold formula(s)
     int size; // Current size of the dynamic array
     int capacity; // Capacity of the dynamic array
@@ -56,6 +58,44 @@ public:
     Plan& operator=(const Plan& source);
 
     /// <summary>
+    /// Equality operator
+    /// Precondition: None.
+    /// Postcondition: Returns true if the two Plan objects are equal,
+    /// false otherwise.
+    /// </summary>
+    bool operator==(const Plan& other) const;
+
+    /// <summary>
+    /// Inequality operator
+    /// Precondition: None.
+    /// Postcondition: Returns true if the two Plan objects are not equal,
+    /// false otherwise.
+    /// </summary>
+    bool operator!=(const Plan& other) const;
+
+    /// <summary>
+    /// Less than operator
+    /// Precondition: None.
+    /// Postcondition: Boolean value is returned.
+    /// </summary>
+    bool operator<(const Plan& other) const;
+
+    /// <summary>
+    /// Greater than operator
+    /// Precondition: None.
+    /// Postcondition: Boolean value is returned.
+    /// </summary>
+    bool operator>(const Plan& other) const;
+
+    /// <summary>
+    /// Stream insertion operator
+    /// Precondition: None.
+    /// Postcondition: The string representation of the Plan object is inserted
+    /// into the output stream.
+    /// </summary>
+    friend std::ostream& operator<<(std::ostream& os, const Plan& plan);
+
+    /// <summary>
     /// Move operator
     /// Precondition: The source Plan object must be valid.
     /// Postcondition: The source Plan object is moved into the current Plan
@@ -82,7 +122,7 @@ public:
     /// Precondition: The Plan object must contain at least one Formula object.
     /// Postcondition: The last Formula object in the Plan is removed.
     /// </summary>
-    void Remove();
+    virtual void Remove();
 
     /// <summary>
     /// Replace function
@@ -91,14 +131,37 @@ public:
     /// Postcondition: The Formula object at the specified index in
     /// the Plan is replaced with newFormula.
     /// </summary>
-    void Replace(int index, Formula* newFormula);
+    virtual void Replace(int index, Formula* newFormula);
+
+    /// <summary>
+    /// Apply function
+    /// Precondition: None.
+    /// Postcondition: A string representation of the production rate and
+    /// simulation result is returned.
+    /// </summary>
+    virtual std::string Apply();
+
+    /// <summary>
+    /// Query function
+    /// Precondition: None.
+    /// Postcondition: A string representation of the production rate and
+    /// simulation result is returned.
+    /// </summary>
+    virtual std::string Query();
+
+    /// <summary>
+    /// Clone function
+    /// Precondition: None.
+    /// Postcondition: A pointer to a new Plan object is returned.
+    /// </summary>
+    virtual Plan* Clone();
 
     /// <summary>
     /// To String function
     /// Precondition: None.
     /// Postcondition: A string representation of the Plan object is returned.
     /// </summary>
-    std::string toString();
+    std::string toString() const;
 };
 
 #endif // !PLAN_H

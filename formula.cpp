@@ -9,6 +9,8 @@
  *      of Formula class.
  *
  *      -2024, Feb 3 Ai Sun - Change arrays to map
+ *
+ *      -2024, Feb 29 Ai Sun - Add getInput function, change Apply function
  */
 
 /*
@@ -41,6 +43,7 @@
  */
 
 #include "formula.h"
+#include "stockpile.h"
 #include <stdexcept>
 #include <map>
 #include <string>
@@ -84,6 +87,17 @@ Formula::Formula(const std::string inNames[], const int inQuantities[], int inNu
 
 }
 
+bool Formula::operator==(const Formula& other) const {
+    // Implement comparison logic here
+    // For example, compare condition and result maps
+    return (condition == other.condition) && (result == other.result);
+}
+
+bool Formula::operator!=(const Formula& other) const {
+    // Implement comparison logic here
+    return !(*this == other);
+}
+
 int Formula::getProficiency() const
 {
     return proficiency;
@@ -121,6 +135,54 @@ std::string Formula::toString()
     }
 
     return os.str();
+}
+
+stockpile* Formula::applyToStockpile() {
+
+    const int INDEX = 1, MAX = 100;
+
+    double rate;
+
+    stockpile* stock;
+
+    int randomNumber = rand() % MAX;
+
+    for (int i = DEFAULT; i < TYPE; i++) {
+        // if is the last one
+        if (i == TYPE - INDEX) {
+
+            if (randomNumber >= probability[(i)])
+                rate =  produceRate[(i)];
+
+        }
+        else if (randomNumber >= probability[(i)] &&
+                 randomNumber < probability[(i + INDEX)]) {
+
+            rate =  produceRate[(i)];
+
+        }
+
+    }
+
+    if (rate != 0) {
+
+        std::map<std::string, int> results;
+
+        for (auto & it : result) {
+
+            int temp = it.second;
+
+            results[it.first] = temp * rate;
+
+        }
+
+        stock = new stockpile(results);
+
+    }
+
+    else stock = new stockpile();
+
+    return stock;
 }
 
 std::string Formula::apply()
@@ -177,6 +239,13 @@ std::string Formula::apply()
     }
 
     return os.str();
+}
+
+std::map<std::string, int> Formula::getInput() {
+    // deep copy a map
+    std::map<std::string, int> input = condition;
+
+    return input;
 }
 
 Formula::~Formula() = default;
